@@ -32,6 +32,8 @@
   border-radius: 25px;
   border-style: solid;
   border-width: 2px;
+  color: white;
+  font-size: 1.1rem;
 }
 
 .signup-form .btn {

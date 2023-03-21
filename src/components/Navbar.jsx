@@ -15,7 +15,7 @@ function Navbar() {
 
     <nav className="navbar navbar-expand-md bg-dark">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/">Exam Ease</a>
+        <a className="navbar-brand" href="/">eLibrary</a>
         <button className="navbar-toggler" style={{ backgroundColor: "white" }} type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon" ></span>
         </button>
@@ -30,9 +30,9 @@ function Navbar() {
 
           {user &&
             <ul className="nav">
-            <li className="nav-item btn btn-outline-primary"><Link to="/signup">Upload book</Link></li>
+            <li className="nav-item btn btn-outline-primary"><Link to="/book_upload">Upload book</Link></li>
               <li className="nav-item">
-                {!isPending && <button className="btn btn-outline-success" onClick={logout}>Logout</button>}
+                {!isPending && <button className="btn btn-outline-success" onClick={logout} style={{color : "white"}}>Logout</button>}
                 {isPending && <button className="btn btn-outline-success" disabled>Logging out...</button>}
               </li>
             </ul>

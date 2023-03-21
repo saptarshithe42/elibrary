@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useSignup } from "../../hooks/useSignup.js"
+import { useNavigate } from "react-router-dom"
 
 // styles
 import "./Signup.css"
@@ -11,10 +12,14 @@ export default function Signup() {
   const [displayName, setDisplayName] = useState('')
   const {signup, isPending, error} = useSignup()
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    signup(email, password, displayName)
+    await signup(email, password, displayName)
+
+    navigate("/")
   }
 
 
