@@ -1,19 +1,23 @@
 import React from "react"
 import { useState } from "react"
-import {useAuthContext} from "../../hooks/useAuthContext"
-import { projectStorage, projectFirestore } from "../../firebase/config"
+import { useAuthContext } from "../../hooks/useAuthContext"
+import { projectStorage, projectFirestore, timestamp } from "../../firebase/config"
 
 // styles
 import "./BookUpload.css"
+import { useNavigate } from "react-router-dom"
 
 function BookUpload() {
 	const [file, setFile] = useState(null)
 	const [fileError, setFileError] = useState(null)
+	const [thumbnail, setThumbnail] = useState(null)
+	const [thumbnailError, setThumbnailError] = useState(null)
 	const [fileSize, setFileSize] = useState(0)
 	const [bookName, setBookName] = useState("")
 	const [authorNames, setAuthorNames] = useState("")
+	const navigate = useNavigate()
 
-	const {user} = useAuthContext()
+	const { user } = useAuthContext()
 
 	const handleFileChange = (e) => {
 
@@ -22,25 +26,51 @@ function BookUpload() {
 
 		let selected = e.target.files[0]  // selecting first element of array of files
 		console.log(selected)
-	
+
 		if (!selected) {
-		  setFileError("Please select a file")
-		  return
+			setFileError("Please select a file")
+			return
 		}
-	
+
 		if (!selected.type.includes("pdf")) {
 			alert("selected file is not pdf")
-		  	setFileError("selected file must be a PDF")
-		  return
+			setFileError("selected file must be a PDF")
+			return
 		}
-	
+
 		// in case of no error
 		setFileError(null)
-	
+
 		setFile(selected)
 		setFileSize(selected.size)
 		console.log("file uploaded")
 
+	}
+
+	const handleThumbnailChange = (e) => {
+
+		// to reset any selected image
+		setThumbnail(null)
+
+		let selected = e.target.files[0]  // selecting first element of array of files
+		console.log(selected)
+
+		if (!selected) {
+			setThumbnailError("Please select a file")
+			return
+		}
+
+		if (!selected.type.includes("image")) {
+			alert("selected file must be an image");
+			setThumbnailError("selected file must be an image")
+			return
+		}
+
+		// in case of no error
+		setThumbnailError(null)
+
+		setThumbnail(selected)
+		console.log("thumbnail updated")
 	}
 
 	const handleSubmit = async (e) => {
@@ -54,37 +84,63 @@ function BookUpload() {
 		})
 
 
-		// uploading the book
+		// uploading data
 
-		try{
+		try {
 
-			const uploadPath = `books/${user.uid}/${file.name}`
+			// uploading pdf file
+			const fileUploadPath = `books/${user.uid}/${file.name}`
 
-            const uploadedFile = await projectStorage.ref(uploadPath).put(file)
+			const uploadedFile = await projectStorage.ref(fileUploadPath).put(file)
 
-            const fileUrl = await uploadedFile.ref.getDownloadURL()  // getting the url of the file
+			const fileUrl = await uploadedFile.ref.getDownloadURL()  // getting the url of the file
+
+			// uploading thumbnail
+			const imgUploadPath = `thumbnails/${user.uid}/${thumbnail.name}`
+
+            const img = await projectStorage.ref(imgUploadPath).put(thumbnail)
+
+            const imgUrl = await img.ref.getDownloadURL()  // getting the url of the image
 
 			// console.log(fileUrl);
 
+			// book document to be written into "books" collection
 			let bookObj = {
 
-				name : bookName,
-				authorList : authorList,
-				upvotes : 0,
-				downvotes : 0,
-				size : fileSize / 1e6, // size in MB
-				reviews : [],
-				fileUrl : fileUrl,
-				uploadedBy : user.displayname
+				name: bookName,
+				authorList: authorList,
+				upvotes: 0,
+				downvotes: 0,
+				size: fileSize / 1e6, // size in MB
+				fileUrl: fileUrl,
+				uploadedBy: user.displayName,
+				imgUrl : imgUrl,
+				uploadedAt : timestamp.fromDate(new Date()),
 			}
+
+			const addedBook = await projectFirestore.collection("books").add(bookObj)
+			const userRef = projectFirestore.collection("users").doc(user.uid);
+
+			// entry to be made in user's uploadedBooks list
+			let uploadedArr = (await userRef.get()).data().uploadedBooks
+
+
+			uploadedArr.push(addedBook.id)
+			// adding currently created book ID in uploadedBooks array in user's document
+			await userRef.update({
+				uploadedBooks: uploadedArr
+			})
+
 			
+			// console.log(bookObj);
+			navigate("/")
 		}
-		catch(err){
+		catch (err) {
 			console.log(err);
 		}
 
 
-		
+
 
 
 		// console.log(bookObj);
@@ -126,17 +182,28 @@ function BookUpload() {
 
 				<div className="mb-3">
 					<label htmlFor="bookFile" className="form-label">Upload PDF file</label>
-					<input 
-					className="form-control" 
-					type="file" 
-					id="bookFile"
-					onChange={handleFileChange}
-					required
-					 />
+					<input
+						className="form-control"
+						type="file"
+						id="bookFile"
+						onChange={handleFileChange}
+						required
+					/>
 				</div>
 
-				<div style={{textAlign : "center"}}>
-					{!fileError && <button type="submit" className="btn btn-primary">Submit</button>}
+				<div className="mb-3">
+					<label htmlFor="imgFile" className="form-label">Upload thumbnail (image) :</label>
+					<input
+						className="form-control"
+						type="file"
+						id="imgFile"
+						onChange={handleThumbnailChange}
+						required
+					/>
+				</div>
+
+				<div style={{ textAlign: "center" }}>
+					{!fileError && !thumbnailError && <button type="submit" className="btn btn-primary">Submit</button>}
 				</div>
 			</form>
 

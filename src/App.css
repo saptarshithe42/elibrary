@@ -1,3 +1,5 @@
 .App{
-    background-image: url("/src/background_img.jpg");
+    /* background-image: url("/src/background_img.jpg"); */
+    background-image: url("/bg_img_4.jpeg");
+    /* background-repeat: no-repeat; */
 }
