@@ -2,10 +2,13 @@ import React from "react"
 import { useState } from "react"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { projectStorage, projectFirestore, timestamp } from "../../firebase/config"
+import { useNavigate } from "react-router-dom"
 
 // styles
 import "./BookUpload.css"
-import { useNavigate } from "react-router-dom"
+
+// components
+import LoadingAnimation from "../../components/LoadingAnimation"
 
 function BookUpload() {
 	const [file, setFile] = useState(null)
@@ -15,6 +18,8 @@ function BookUpload() {
 	const [fileSize, setFileSize] = useState(0)
 	const [bookName, setBookName] = useState("")
 	const [authorNames, setAuthorNames] = useState("")
+	const [language, setLanguage] = useState("")
+	const [isLoading, setIsLoading] = useState(false)
 	const navigate = useNavigate()
 
 	const { user } = useAuthContext()
@@ -77,12 +82,13 @@ function BookUpload() {
 
 		e.preventDefault()
 
+		setIsLoading(true)
+
 		// forming an array of author names
 		let authorList = authorNames.split(",")
 		authorList = authorList.map((name) => {
-			return name.trim();
+			return (name.trim()).toUpperCase();
 		})
-
 
 		// uploading data
 
@@ -107,7 +113,7 @@ function BookUpload() {
 			// book document to be written into "books" collection
 			let bookObj = {
 
-				name: bookName,
+				name: (bookName.trim()).toUpperCase(),
 				authorList: authorList,
 				upvotes: 0,
 				downvotes: 0,
@@ -116,6 +122,8 @@ function BookUpload() {
 				uploadedBy: user.displayName,
 				imgUrl : imgUrl,
 				uploadedAt : timestamp.fromDate(new Date()),
+				language : (language.trim()).toUpperCase(),
+				downloads : 0
 			}
 
 			const addedBook = await projectFirestore.collection("books").add(bookObj)
@@ -131,7 +139,7 @@ function BookUpload() {
 				uploadedBooks: uploadedArr
 			})
 
-			
+			setIsLoading(false)
 			// console.log(bookObj);
 			navigate("/")
 		}
@@ -150,7 +158,7 @@ function BookUpload() {
 
 	return (
 		<div>
-			<form className="book-form" onSubmit={handleSubmit}>
+			{isLoading ? <LoadingAnimation /> :  <form className="book-form" onSubmit={handleSubmit}>
 				<div className="mb-3">
 					<label htmlFor="bookName" className="form-label">Book Name :</label>
 					<input
@@ -181,6 +189,20 @@ function BookUpload() {
 				</div>
 
 				<div className="mb-3">
+					<label htmlFor="language" className="form-label">Language :</label>
+					<input
+						type="text"
+						className="form-control"
+						id="language"
+						aria-describedby="language"
+						autoComplete="off"
+						onChange={(e) => setLanguage(e.target.value)}
+						value={language}
+						required
+					/>
+				</div>
+
+				<div className="mb-3">
 					<label htmlFor="bookFile" className="form-label">Upload PDF file</label>
 					<input
 						className="form-control"
@@ -203,10 +225,11 @@ function BookUpload() {
 				</div>
 
 				<div style={{ textAlign: "center" }}>
-					{!fileError && !thumbnailError && <button type="submit" className="btn btn-primary">Submit</button>}
+					{!fileError && !thumbnailError && !isLoading  && <button type="submit" className="btn btn-primary">Submit</button>}
+
 				</div>
 			</form>
-
+}
 		</div>
 	)
 }
