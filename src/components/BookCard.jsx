@@ -22,7 +22,7 @@ function BookCard({ book }) {
 
     return (
 
-        <div className="col col-lg-4 col-md-6 col-sm-12 card-holder-div">
+        <div className="col col-xl-3 col-lg-4 col-md-6 col-sm-12 card-holder-div">
             <div className="card" style={{ width: "15rem", overflow: "hidden" }}>
                 <img src={book.imgUrl} className="card-img" alt="..." />
                 <div className="card-body">

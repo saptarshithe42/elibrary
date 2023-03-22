@@ -26,22 +26,26 @@ export default function Dashboard() {
 		const fetchBooks = async () => {
 			// fetch 5 most popular books
 
-			setIsLoading(true)
-			let docs = await booksRef.orderBy("upvotes").limit(fetchLimit).get()
+			try {
+				setIsLoading(true)
+				let docs = await booksRef.orderBy("upvotes", "desc").limit(fetchLimit).get()
 
-			let arr = []
-			docs.forEach((doc) => {
-				// doc.data()
-				arr.push({...doc.data(), id : doc.id})
-				console.log(doc.data())
+				let arr = []
+				docs.forEach((doc) => {
+					// doc.data()
+					arr.push({ ...doc.data(), id: doc.id })
+					console.log(doc.data())
 
-			})
+				})
 
-			setBookList(arr)
+				setBookList(arr)
 
-			setIsLoading(false);
-			// console.log(bookList);
-			console.log(arr);
+				setIsLoading(false);
+				// console.log(bookList);
+				console.log(arr);
+			} catch (err) {
+				alert(err)
+			}
 
 		}
 
@@ -63,12 +67,13 @@ export default function Dashboard() {
 			<SearchComponent />
 			{isLoading ? <LoadingAnimation /> :
 				<div className="main-div">
+					<h1 className="list-heading">Most Popular</h1>
 					<BooksGrid
 						bookList={bookList}
 					/>
 
 					<button className="btn btn-primary"
-					onClick={incrementFetchLimit} 
+						onClick={incrementFetchLimit}
 					>More</button>
 				</div>
 			}

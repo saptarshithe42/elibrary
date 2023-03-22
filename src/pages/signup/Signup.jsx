@@ -19,7 +19,8 @@ export default function Signup() {
 
     await signup(email, password, displayName)
 
-    navigate("/")
+    // navigate("/")
+    navigate(-1)
   }
 
 

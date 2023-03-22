@@ -19,6 +19,7 @@ function BookUpload() {
 	const [bookName, setBookName] = useState("")
 	const [authorNames, setAuthorNames] = useState("")
 	const [language, setLanguage] = useState("")
+	const [description, setDescription] = useState("")
 	const [isLoading, setIsLoading] = useState(false)
 	const navigate = useNavigate()
 
@@ -123,7 +124,8 @@ function BookUpload() {
 				imgUrl : imgUrl,
 				uploadedAt : timestamp.fromDate(new Date()),
 				language : (language.trim()).toUpperCase(),
-				downloads : 0
+				downloads : 0,
+				description : description.trim()
 			}
 
 			const addedBook = await projectFirestore.collection("books").add(bookObj)
@@ -222,6 +224,20 @@ function BookUpload() {
 						onChange={handleThumbnailChange}
 						required
 					/>
+				</div>
+
+				<div className="mb-3">
+					<label htmlFor="description" className="form-label">Description :</label>
+					<textarea
+						className="form-control"
+						id="description"
+						aria-describedby="description"
+						autoComplete="off"
+						onChange={(e) => setDescription(e.target.value)}
+						value={description}
+						required
+					/>
+
 				</div>
 
 				<div style={{ textAlign: "center" }}>
