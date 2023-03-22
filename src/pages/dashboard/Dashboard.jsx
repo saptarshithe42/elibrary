@@ -34,7 +34,7 @@ export default function Dashboard() {
 				docs.forEach((doc) => {
 					// doc.data()
 					arr.push({ ...doc.data(), id: doc.id })
-					console.log(doc.data())
+					// console.log(doc.data())
 
 				})
 
@@ -42,7 +42,7 @@ export default function Dashboard() {
 
 				setIsLoading(false);
 				// console.log(bookList);
-				console.log(arr);
+				// console.log(arr);
 			} catch (err) {
 				alert(err)
 			}

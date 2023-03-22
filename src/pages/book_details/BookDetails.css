@@ -12,9 +12,10 @@
     margin-top: 4rem;
 }
 
-.icon-span{
+.icon-div{
     margin : 1rem;
     font-size: 1.2rem;
+    text-align: center;
 }
 
 .book-description{
@@ -34,4 +35,8 @@
 .book-details .btn{
     color : white;
     border-width: 0.1rem;
+}
+
+.book-details-container{
+    margin-bottom: 5rem;
 }

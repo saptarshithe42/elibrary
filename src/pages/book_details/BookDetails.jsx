@@ -131,7 +131,7 @@ function BookDetails() {
     }
 
     return (
-        <div className="container">
+        <div className="container book-details-container">
             {isLoading ? <LoadingAnimation /> :
                 <div className="row book-details-holder" style={{ color: "white" }}>
                     <div className="col-12 col-sm-6 book-img-div">
@@ -153,8 +153,8 @@ function BookDetails() {
                         </div>
 
                         <div className="row">
-                            <div className="icon-span col-12 col-md-3">{downloads} &nbsp; <BsDownload /> </div>
-                            <div className="icon-span col-12 col-md-3">
+                            <div className="icon-div col-12 col-md-3">{downloads} &nbsp; <BsDownload /> </div>
+                            <div className="icon-div col-12 col-md-3">
 
                                 <button
                                     className="icon-btn btn btn-outline-success"
@@ -166,7 +166,7 @@ function BookDetails() {
                                     <AiFillLike />
                                 </button>
                             </div>
-                            <div className="icon-span col-12 col-md-3">
+                            <div className="icon-div col-12 col-md-3">
                                 <button
                                     className="btn btn-outline-danger"
                                     disabled={isDisabled}

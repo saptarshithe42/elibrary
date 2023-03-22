@@ -12,6 +12,7 @@ import Signup from "./pages/signup/Signup";
 import Dashboard from "./pages/dashboard/Dashboard";
 import BookUpload from "./pages/book_upload/BookUpload";
 import BookDetails from "./pages/book_details/BookDetails";
+import SearchResults from "./pages/search/SearchResults";
 
 function App() {
 
@@ -29,6 +30,8 @@ function App() {
           } />
 
           <Route path="/book/:id" element={<BookDetails />} />
+
+          <Route path="/search/:query" element={<SearchResults />} />
 
           <Route path="/login" element={<Login />} />
 
