@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 import { projectAuth, projectStorage, projectFirestore } from "../firebase/config"
 import { useAuthContext } from "./useAuthContext"
 
+import thumbnail from "./default_user_img.jfif"
+
 export const useSignup = () => {
 
     const [isCancelled, setIsCancelled] = useState(false)
@@ -23,13 +25,14 @@ export const useSignup = () => {
                 throw new Error("Could not complete signup")
             }
 
+            // default dp
+            const imgUrl = "https://firebasestorage.googleapis.com/v0/b/elibrary-38a3f.appspot.com/o/thumbnails%2Fdefault_user_img.jfif?alt=media&token=3392b8a2-7420-4e39-9dbc-ead1dcb95f4c" 
+
             // add display name to user
 
-            await res.user.updateProfile({displayName})
+            await res.user.updateProfile({displayName, photoURL : imgUrl})
 
-            // create a user document (to store online status, photoUrl and displayName,
-            // because we plan to show all the members in a project in sidebar, with their
-            // photos, usernames and online status)
+            
             // each document is having the id same as uid instead of auto-generated firestore id
 
             // .doc(res.user.id) will create a new document if it isn't existing

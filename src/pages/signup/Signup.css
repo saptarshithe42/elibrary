@@ -12,14 +12,15 @@
   margin-right: auto;
   margin-top: 15vh;
   padding: 40px;
-  border: 1px solid #ddd;
+  border: 5px solid #ddd;
   /* box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05); */
   /* background: #fff; */
   border-radius: 25px;
   box-shadow: -3px -3px 9px #aaa9a9a2,
     3px 3px 7px rgba(147, 149, 151, 0.671);
   color: white;
-  background-image: url("/src/background_img.jpg");
+  background: none;
+  /* background-image: url("/src/background_img.jpg"); */
 }
 
 .signup-form label {

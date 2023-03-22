@@ -26,7 +26,7 @@ function BookCard({ book }) {
             <div className="card" style={{ width: "15rem", overflow: "hidden" }}>
                 <img src={book.imgUrl} className="card-img" alt="..." />
                 <div className="card-body">
-                    <h5 className="card-title">{book.name}</h5>
+                    <h5 className="card-title">{book.name.slice(0, 30)}...</h5>
                     <p className="card-text">Authors : {
                         book.authorList.map((author, index) => {
                             return (<span key={index}>{author}. </span>)

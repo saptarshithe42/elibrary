@@ -18,8 +18,8 @@ export default function Login() {
 
     await login(email, password)
 
-    // navigate("/")
-    navigate(-1)
+    navigate("/")
+    // navigate(-1)
   }
 
   return (

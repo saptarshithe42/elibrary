@@ -25,6 +25,7 @@ function BookDetails() {
     const [downvotes, setDownvotes] = useState(0)
     const [downloads, setDownloads] = useState(0)
     const [isDisabled, setisDisabled] = useState(false)
+    const [markedAsFavourite, setMarkedAsFavourite] = useState(false)
 
     const { user } = useAuthContext()
 
@@ -114,6 +115,7 @@ function BookDetails() {
     const addToFavourites = async () => {
 
         try {
+            setMarkedAsFavourite(true)
             const userRef = projectFirestore.collection("users").doc(user.uid);
             let favArr = (await userRef.get()).data().favourites
 
@@ -188,6 +190,7 @@ function BookDetails() {
                                 className="btn btn-warning"
                                 style={{ color: "black" }}
                                 onClick={addToFavourites}
+                                disabled={markedAsFavourite}
                             >
                                 Favourite <AiFillStar />
                             </button>}
