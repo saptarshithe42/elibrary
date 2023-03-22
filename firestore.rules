@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /books/{book_id}{
+    	allow read, update : if true; 
+      // anyone can view books, update likes / dislikes
+      allow create, read, update : if request.auth != null;
+      // only registered user can create new book entry
+    }
+    
+    match /users/{user_id}{
+    	allow read, write : if request.auth != null;
+      // any authenticated user can read / write in users collection
+       allow update: if request.auth.uid == user_id;
+       // an authenticated user can update their document only
+    
+    }
+  }
+}
