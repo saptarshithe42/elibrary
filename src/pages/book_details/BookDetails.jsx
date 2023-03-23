@@ -136,11 +136,11 @@ function BookDetails() {
         <div className="container book-details-container">
             {isLoading ? <LoadingAnimation /> :
                 <div className="row book-details-holder" style={{ color: "white" }}>
-                    <div className="col-12 col-sm-6 book-img-div">
+                    <div className="col-12 col-lg-6 book-img-div">
                         <img src={book.imgUrl} className="book-img" />
                     </div>
 
-                    <div className="col-12 col-sm-6 book-details">
+                    <div className="col-12 col-lg-6 book-details">
                         <div style={{textAlign : "center"}}>
                             <h1>{book.name}</h1>
                             <p>{book.authorList.map((author, index) => {
